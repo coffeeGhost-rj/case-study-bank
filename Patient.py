@@ -85,13 +85,15 @@ class Patient():
         return self.doctor.showDoctorDetails()
 
     def showPatientDetails(self):
-        return ("Patient ID: "+ str(self.p_ID) +
-                "\nName: "+ self.pName +
-                "\nGender: " + self.gender +
-                "\nAge: "+ str(self.age) +
-                "\nPatient Type: "+ self.patient_type +
-                "\nDiagnosis: "+ self.diagnosis +
-                "\nAssigned Doctor: " + self.doctor.name)
+        return (
+            "Patient ID: " + str(self.patient_id) +
+            "\nName: " + self.pName +
+            "\nGender: " + self.gender +
+            "\nAge: " + str(self.age) +
+            "\nPatient Type: " + self.patient_type +
+            "\nDiagnosis: " + self.diagnosis +
+            "\nAssigned Doctor: " + self.doctor.name
+        )
 
 
 class InPatient(Patient):
@@ -120,10 +122,11 @@ class InPatient(Patient):
 
 
     def showPatientDetails(self):
-        return (super().showPatientDetails() + 
-        "\nWard : " , self.ward + 
-        "\nBed: " + str(self.bed) + 
-        "\n Admission Date: " + self.admission_date.strftime("%d-%m-%Y %H:%M:%S")
+        return (
+            super().showPatientDetails() +
+            "\nWard: " + self.ward +
+            "\nBed: " + str(self.bed) +
+            "\nAdmission Date: " + self.admission_date.strftime("%d-%m-%Y %H:%M:%S")
         )
 
 
@@ -144,9 +147,10 @@ class OutPatient(Patient):
 
 
     def showPatientDetails(self):
-        return (super().showPatientDetails() +
-        "\nConsultation Room: ", self.room +
-        "\nAppointment Date: " + self.appointmentDate.strftime("%d-%M-%Y  %H:%M:%S")
+        return (
+            super().showPatientDetails() +
+            "\nConsultation Room: " + self.room +
+            "\nAppointment Date: " + self.appointmentDate.strftime("%d-%m-%Y %H:%M:%S")
         )
 
 
