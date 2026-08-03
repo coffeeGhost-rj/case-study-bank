@@ -1,6 +1,9 @@
+
+from datetime import datetime
+
 class Patient():
     p_ID = 1000
-    def __init__(self, pName, age, gender, bloodGrp, patient_type, ward, bed, diagnosis, docObj):
+    def __init__(self, pName, age, gender, bloodGrp, patient_type, diagnosis, docObj):
         Patient.p_ID+=1
         self.patient_id = "P"+ str(Patient.p_ID)
 
@@ -9,8 +12,6 @@ class Patient():
         self.set_bg(bloodGrp)
         self.set_gender(gender)
         self.setpatientType(patient_type)
-        self.setWard(ward)
-        self.setBed(bed)
         self.setDiagnosis(diagnosis)
         self.setDoctor(docObj)
 
@@ -76,18 +77,6 @@ class Patient():
         else:
             self.diagnosis = diagnosis
 
-    def setWard(self,ward):
-        if len(ward)<=0:
-            raise ValueError("The ward cannot be empty.")
-        else:
-            self.ward = ward
-            
-
-    def setBed(self, bed):
-        if(len(str(bed)))<=0:
-            raise ValueError("This field cannot be empty.")
-        else:
-            self.bed = bed
 
     def setDoctor(self, docObj):
         self.doctor = docObj
@@ -102,7 +91,95 @@ class Patient():
                 "\nAge: "+ str(self.age) +
                 "\nPatient Type: "+ self.patient_type +
                 "\nDiagnosis: "+ self.diagnosis +
-                "\nWard " + self.ward +
-                "\nBed no.: " + str(self.bed))
+                "\nAssigned Doctor: " + self.doctor.name)
 
 
+class InPatient(Patient):
+    def __init__(self, pName, age, gender, bloodGrp, patient_type, diagnosis, docObj,  ward, bed):
+        super().__init__(pName, age, gender, bloodGrp, patient_type, diagnosis, docObj)
+
+        self.setWard(ward)
+        self.setBed(bed)
+
+        self.admission_date= datetime.now()
+
+
+    def setWard(self,ward):
+        if len(ward)<=0:
+            raise ValueError("The ward cannot be empty.")
+        else:
+            self.ward = ward
+                
+    
+    def setBed(self, bed):
+        if(len(str(bed)))<=0:
+            raise ValueError("This field cannot be empty.")
+        else:
+            self.bed = bed
+
+
+
+    def showPatientDetails(self):
+        return (super().showPatientDetails() + 
+        "\nWard : " , self.ward + 
+        "\nBed: " + str(self.bed) + 
+        "\n Admission Date: " + self.admission_date.strftime("%d-%m-%Y %H:%M:%S")
+        )
+
+
+
+class OutPatient(Patient):
+    def __init__(self, pName, age, gender, bloodGrp, patient_type, diagnosis, docObj , room):
+        super().__init__(pName, age, gender, bloodGrp, patient_type, diagnosis, docObj)
+
+        self.appointmentDate = datetime.now()
+        self.setConsultation_room(room) 
+
+
+    def setConsultation_room(self,room):
+        if len(room)==0:
+            raise ValueError("Consultation Room field cannot be Empty. Pls specify all details.")
+        else:
+            self.room =room
+
+
+    def showPatientDetails(self):
+        return (super().showPatientDetails() +
+        "\nConsultation Room: ", self.room +
+        "\nAppointment Date: " + self.appointmentDate.strftime("%d-%M-%Y  %H:%M:%S")
+        )
+
+
+# class GeneralPatient(Patient):
+#     def __init__(self, pName, age, gender, bloodGrp, reason, days):
+#         super().__init__(pName, age, gender, bloodGrp)
+
+#         self.reason = reason
+#         self.days = days
+
+#         def showExtraDetails(self):
+
+#             print("Admission Reason :", self.reason)
+#             print("No. of days since Patient is admitted: ", self.days)
+
+
+# class ChildPatient(Patient):
+#     def __init__(self, pName, age, gender, bloodGrp, vaccineStatus):
+#         super().__init__(pName, age, gender, bloodGrp)
+#         self.vaccineStatus = vaccineStatus
+
+
+
+
+# class ICUpatient(Patient):
+#     def __init__(self, pName, age, gender, bloodGrp, ventilator):
+#         super().__init__(pName, age, gender, bloodGrp)
+
+#         self.ventilator = ventilator
+
+        
+
+
+
+
+        
