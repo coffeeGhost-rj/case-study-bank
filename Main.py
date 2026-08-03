@@ -12,6 +12,14 @@ def findpatient (p_ID):
 
     raise LookupError("Patient not found in the records.")
 
+def findDoctor (p_ID):
+    for p in doctors:
+
+        if p.doc_ID == p_ID:
+            return p
+
+    raise LookupError("Doctor not found in the records.")
+
 
 def showDoctors():
 
@@ -67,30 +75,45 @@ def showVitals():
 
 
 def doctorAccess():
+    print("\n ------------------------")
+    print("Doctors present in the hospital: ", len(doctors))
+    print("\n ------------------------")
+    
     try:
 
         #print(pObj.showPatientDetails())
         # doctor_name = input("Enter Doctor name:")
         doctor_id = input("Enter the Doctor ID: ")
-        
-        patient_ID = input("Enter Patient ID: ")
-        patient = findpatient(patient_ID.upper())
+        dname= findDoctor(doctor_id.upper())
+        print("\n")
+        print("Hello Dr.",dname.name,"!")
+        print("\n")
+        while True:
 
-        if patient.doctor.doc_ID!= doctor_id.upper():
 
-            raise ValueError("Doctor is not assigned to this patient.")
+            print("---- Patient Records ----")
 
-        print("\n ========= PATIENT REPORT ========")
-        print(patient.showPatientDetails())
 
-        print("\n =========  VITAL REPORT  ========")
-        print(patient.getVitalDetails())
+            print("1. Patient Access")
+            print("2. Add Patient")
+            print("3. Exit from Doctor window.")
+            print("\n")
 
-        print("\n =========    ALERTS      ========")
-        alerts = generateAlert(patient.vitals)
+            option = input("Enter the option you would like to choose: ")
 
-        for alert in alerts:
-            print(alert)
+            if option == "1":
+                patientAccess()
+
+            elif option == "2":
+                addPatient()
+                
+            elif option == "3":
+                print("End of program.")
+                break
+
+            else:
+                print("Invalid option.")
+
 
     except ValueError:
         print("The details provided are invalid.")
@@ -100,6 +123,9 @@ def doctorAccess():
 #patient access
 
 def patientAccess():
+    print("\n ------------------------")
+    print("Patients currently admitted to the hospital are: ", len(patients))
+    print("\n ------------------------")
 
     try:
         patient_ID = input("Enter Patient ID:" )
@@ -182,8 +208,6 @@ showVitals()
 
 input("\nPress Enter to Continue...")
 
-
-
 # menu
 
 while True:
@@ -194,8 +218,9 @@ while True:
 
     print("1. Doctor access")
     print("2. Patient Access")
-    print("3. Add Patient")
-    print("4. Exit")
+    # print("3. Add Patient")
+    print("3. Exit")
+    print("\n")
 
     option = input("Enter the option you would like to choose: ")
 
@@ -206,9 +231,9 @@ while True:
         patientAccess()
 
     elif option == "3":
-        addPatient()
+    #     addPatient()
         
-    elif option == "4":
+    # elif option == "4":
         print("End of program.")
         break
 

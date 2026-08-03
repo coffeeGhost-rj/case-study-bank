@@ -8,6 +8,8 @@ doctor1 = Doctor("John Smith", "Cardiology")
 doctor2 = Doctor("Rakesh Singh", "Neurology")
 doctor3 = Doctor("Will Hall", "Gynaecology")
 
+doctors = [doctor1, doctor2, doctor3]
+
 #create patient
 
 # patient1 = Patient("Amit Shah", 45, "Male", "A+", "Inpatient", "Cardialogy Ward", 12, "Heart Disease", doctor1)
@@ -18,10 +20,10 @@ doctor3 = Doctor("Will Hall", "Gynaecology")
 # Updated sample patient creation to match the current class hierarchy:
 # InPatient(pName, age, gender, bloodGrp, patient_type, diagnosis, docObj, ward, bed)
 # OutPatient(pName, age, gender, bloodGrp, patient_type, diagnosis, docObj, room)
+# Only the first three sample patients are kept in the active patient list.
 patient1 = InPatient("Amit Shah", 45, "Male", "A+", "Inpatient", "Heart Disease", doctor1, "Cardialogy Ward", 12)
 patient2 = InPatient("Emma Wilson", 60, "Female", "O+", "Inpatient", "Stroke Recovery", doctor2, "Neurology Ward", 9)
 patient3 = OutPatient("Raj Kumar", 30, "Male", "AB-", "Outpatient", "Regular checkup", doctor1, "OPD")
-patient4 = OutPatient("Ritika Roy", 26, "Female", "A+", "Outpatient", "Regular checkup", doctor2, "OPD")
 
 #creating vital reports
 
