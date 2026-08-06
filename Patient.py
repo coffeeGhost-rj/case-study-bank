@@ -15,20 +15,29 @@ class Patient():
         self.setDiagnosis(diagnosis)
         self.setDoctor(docObj)
 
-        self.vitals = None
+        self.vitals_history = []
 
 
     def setVitals(self,vitalObj):
         if vitalObj is None:
             raise ValueError("Invalid Vital sign.")
         else:
-            self.vitals = vitalObj
+            self.vitals_history.append(vitalObj)
 
     def getVitalDetails(self):
-        if self.vitals is None:
-            raise ValueError("Vitals signs not assigned.")
-        else:
-            return self.vitals.showVitalDetails()
+
+        if not self.vitals_history:
+            raise ValueError("No vital signs have been recorded for this patient yet.")
+
+        vital_log = "\n====== Vitals History ======"
+        reading_num = 1
+
+        for vital in self.vitals_history:
+            vital_log = vital_log + "\n\n -- Reading -- " + str(reading_num)
+            vital_log = vital_log + "\n" + vital.showVitalDetails()
+            reading_num +=1
+
+        return vital_log
 
 
     def set_pname(self,pName):
@@ -39,7 +48,7 @@ class Patient():
 
     def set_age(self, age):
         if len(str(age))<=0:
-            raise ValueError("The gae of the patient cannot be Empty.")
+            raise ValueError("The age of the patient cannot be Empty.")
         else:
             self.age = age
 

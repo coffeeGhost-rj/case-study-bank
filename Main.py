@@ -58,6 +58,7 @@ def showPatients():
         )
 
 
+
 def showVitals():
 
     print("\nCurrent Vital Records")
@@ -65,12 +66,49 @@ def showVitals():
 
     for patient in patients:
 
-        print(
-            "Patient ID", patient.patient_id,
-            "Temp:", patient.vitals.temperature,
-            "Pulse:", patient.vitals.pulse,
-            "O₂:", patient.vitals.oxygen
-        )
+        if len(patient.vitals_history) == 0:
+            print("Patient ID: " + patient.patient_id + " : NO VITAL RECORDS")
+        else:
+            print("Patient ID: " + patient.patient_id + ": " + patient.pName )
+            reading_num = 1
+            for vital in patient.vitals_history:
+                print(" Reading " + str(reading_num) + "\n ---> Temperature: " + str(vital.temperature) + "°C \nPulse: " + str(vital.pulse) + "bpm \nOxygen Saturation: " + str(vital.oxygen) + "%")
+                reading_num+=1
+
+
+# def showVitals():
+
+#     print("\nCurrent Vital Records")
+#     print("-" * 40)
+
+#     for patient in patients:
+
+#         print(
+#             "Patient ID", patient.patient_id,
+#             "Temp:", patient.vitals.temperature,
+#             "Pulse:", patient.vitals.pulse,
+#             "O₂:", patient.vitals.oxygen
+#         )
+
+
+def updatePatientVitalsMenu():
+    try:
+        patient_ID = input("Enter Patient ID to update: ")
+        patient = findpatient(patient_ID)
+        
+        print("\nUpdating Vitals for " + patient.pName)
+        temp = float(input("Enter Temperature (°C): "))
+        pulse = int(input("Enter Pulse (bpm): "))
+        spo2 = int(input("Enter Oxygen Saturation (%): "))
+        
+        # Save straight to history list without showing upfront warnings
+        new_vitals = VitalSigns(temp, pulse, spo2)
+        patient.setVitals(new_vitals)
+        
+        print("[SUCCESS] New reading added successfully! Reading count: " + str(len(patient.vitals_history)))
+        
+    except ValueError:
+        print("ERROR Failed to update")
 
 
 
@@ -96,7 +134,8 @@ def doctorAccess():
 
             print("1. Patient Access")
             print("2. Add Patient")
-            print("3. Exit from Doctor window.")
+            print("3. Update Patient Vital Signs (New Reading)")
+            print("4. Exit from Doctor window.")
             print("\n")
 
             option = input("Enter the option you would like to choose: ")
@@ -108,6 +147,9 @@ def doctorAccess():
                 addPatient()
                 
             elif option == "3":
+                updatePatientVitalsMenu()
+
+            elif option == "4":
                 print("End of program.")
                 break
 
@@ -140,10 +182,18 @@ def patientAccess():
         print(patient.getVitalDetails())
 
         print("\n =========    ALERTS      ========")
-        alerts = generateAlert(patient.vitals)
+        # alerts = generateAlert(patient.vitals)
     
-        for alert in alerts:
-            print(alert)
+        # for alert in alerts:
+        #     print(alert)
+
+        reading_num = 1
+        for vital in patient.vitals_history:
+            print("\n--- Reading " + str(reading_num) + " Alerts ---")
+            alerts = generateAlert(vital)
+            for alert in alerts:
+                print(alert)
+            reading_num = reading_num + 1
     
     except ValueError:
         print("The details provided are invalid.")
@@ -218,8 +268,8 @@ while True:
 
     print("1. Doctor access")
     print("2. Patient Access")
-    # print("3. Add Patient")
-    print("3. Exit")
+    print("3. View All Current Vitals Summary")
+    print("4. Exit")
     print("\n")
 
     option = input("Enter the option you would like to choose: ")
@@ -231,9 +281,9 @@ while True:
         patientAccess()
 
     elif option == "3":
-    #     addPatient()
+        showVitals()
         
-    # elif option == "4":
+    elif option == "4":
         print("End of program.")
         break
 
