@@ -1,5 +1,6 @@
 class Doctor():
 
+    #auto generating the Doc ID
     doc_ID = 100
 
     def __init__(self, name, specialization):
@@ -9,6 +10,8 @@ class Doctor():
 
         self.setName(name)
         self.setSpeciality(specialization)
+
+    #setter methods for doctor class parameters
 
     def setName(self, name):
         if len(str(name))==0:
