@@ -19,7 +19,7 @@ class Patient():
         # a list for adding multiple readings for multiple patients
         self.vitals_history = []
 
-    # method for appending new readings to the list 
+    # method for appending new readings to the list - invoked in the database.py file 
     def setVitals(self,vitalObj):
         if vitalObj is None:
             raise ValueError("Invalid Vital sign.")
