@@ -15,15 +15,18 @@ class Patient():
         self.setDiagnosis(diagnosis)
         self.setDoctor(docObj)
 
+        
+        # a list for adding multiple readings for multiple patients
         self.vitals_history = []
 
-
+    # method for appending new readings to the list 
     def setVitals(self,vitalObj):
         if vitalObj is None:
             raise ValueError("Invalid Vital sign.")
         else:
             self.vitals_history.append(vitalObj)
 
+    #get method to print the readings of each patient in the list
     def getVitalDetails(self):
 
         if not self.vitals_history:
@@ -163,34 +166,6 @@ class OutPatient(Patient):
         )
 
 
-# class GeneralPatient(Patient):
-#     def __init__(self, pName, age, gender, bloodGrp, reason, days):
-#         super().__init__(pName, age, gender, bloodGrp)
-
-#         self.reason = reason
-#         self.days = days
-
-#         def showExtraDetails(self):
-
-#             print("Admission Reason :", self.reason)
-#             print("No. of days since Patient is admitted: ", self.days)
-
-
-# class ChildPatient(Patient):
-#     def __init__(self, pName, age, gender, bloodGrp, vaccineStatus):
-#         super().__init__(pName, age, gender, bloodGrp)
-#         self.vaccineStatus = vaccineStatus
-
-
-
-
-# class ICUpatient(Patient):
-#     def __init__(self, pName, age, gender, bloodGrp, ventilator):
-#         super().__init__(pName, age, gender, bloodGrp)
-
-#         self.ventilator = ventilator
-
-        
 
 
 
