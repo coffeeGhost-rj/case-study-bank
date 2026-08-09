@@ -1,11 +1,14 @@
 from datetime import datetime
 
+# This class represents one recorded set of vital signs for a patient.
+
 class VitalSigns():
     def __init__(self, temp, pulse,spo2):
         self.setTemp(temp)
         self.setPulse(pulse)
         self.setOxygen(spo2)
 
+        # Stores the exact date and time when this reading was created.
         self.recorded_time = datetime.now()
 
     def setTemp(self,temp):

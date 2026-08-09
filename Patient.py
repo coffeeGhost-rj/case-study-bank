@@ -13,13 +13,22 @@ class Patient():
         self.set_gender(gender)
         self.setpatientType(patient_type)
         self.setDiagnosis(diagnosis)
+
+        # docObj is an OBJECT of the Doctor class.
+        # This creates an ASSOCIATION between Patient and Doctor.
         self.setDoctor(docObj)
 
         
-        # a list for adding multiple readings for multiple patients
+        # ----------------------------------------------------
+        # ONE-TO-MANY ASSOCIATION
+        # ----------------------------------------------------
+        # A Patient can have MULTIPLE vital-sign readings.
+        # One Patient --> Many Vital objects
+        # The list stores multiple Vital objects associated with this Patient object.
+
         self.vitals_history = []
 
-    # method for appending new readings to the list - invoked in the database.py file 
+    # Adds a new Vital object to the patient's vital history. - invoked in the database.py file 
     def setVitals(self,vitalObj):
         if vitalObj is None:
             raise ValueError("Invalid Vital sign.")
@@ -43,6 +52,15 @@ class Patient():
         return vital_log
 
 
+    # This method returns the most recent VitalSigns object associated with the patient.
+    def getLatestVitals(self):
+        if not self.vitals_history:
+            raise ValueError("No vital signs have been recorded for this patient yet.")
+
+        return self.vitals_history[-1]
+
+
+
     def set_pname(self,pName):
         if len(pName)<=0:
             raise ValueError("The name of the patient cannot be Empty!")
@@ -50,8 +68,13 @@ class Patient():
             self.pName = pName
 
     def set_age(self, age):
-        if len(str(age))<=0:
+        if len(str(age))<=0 :
             raise ValueError("The age of the patient cannot be Empty.")
+
+        age = int(age)
+        
+        if age<=0 or age >=120:
+            raise ValueError("Age must be between 1 and 120.")
         else:
             self.age = age
 
@@ -96,6 +119,7 @@ class Patient():
     def getDoctorDetails(self):
         return self.doctor.showDoctorDetails()
 
+
     def showPatientDetails(self):
         return (
             "Patient ID: " + str(self.patient_id) +
@@ -108,13 +132,23 @@ class Patient():
         )
 
 
+#----------------------------------
+# DERIVED CLASS FROM PATIENT CLASS 
+#----------------------------------
 class InPatient(Patient):
+
+    # Constructor of the derived class.
     def __init__(self, pName, age, gender, bloodGrp, patient_type, diagnosis, docObj,  ward, bed):
+
+        # Calls the constructor of the BASE CLASS (Patient).
+        # ------ CODE REUSABILITY ------
         super().__init__(pName, age, gender, bloodGrp, patient_type, diagnosis, docObj)
 
+        # Additional attributes specific to InPatient.
         self.setWard(ward)
         self.setBed(bed)
 
+        # Stores the date and time when the patient was admitted.
         self.admission_date= datetime.now()
 
 
@@ -132,6 +166,9 @@ class InPatient(Patient):
             self.bed = bed
 
 
+    # ---------------------------------
+    # METHOD OVERRIDING - POLYMORPHISM
+    # ---------------------------------
 
     def showPatientDetails(self):
         return (
@@ -142,9 +179,15 @@ class InPatient(Patient):
         )
 
 
-
+#----------------------------------
+# DERIVED CLASS FROM PATIENT CLASS 
+#----------------------------------
 class OutPatient(Patient):
     def __init__(self, pName, age, gender, bloodGrp, patient_type, diagnosis, docObj , room):
+
+        #-------------------
+        # INHERITANCE
+        #-------------------
         super().__init__(pName, age, gender, bloodGrp, patient_type, diagnosis, docObj)
 
         self.appointmentDate = datetime.now()
@@ -158,6 +201,9 @@ class OutPatient(Patient):
             self.room =room
 
 
+    # ---------------------------------
+    # METHOD OVERRIDING - POLYMORPHISM
+    # ---------------------------------
     def showPatientDetails(self):
         return (
             super().showPatientDetails() +

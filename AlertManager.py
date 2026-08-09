@@ -1,6 +1,11 @@
 from datetime import datetime
+# This file contains functions responsible for checking individual vital signs and generating an overall alert.
 
 # methods to check the vitals to generate alerts
+
+# =============================
+# TEMPERATURE CHECK
+# =============================
 def checkTemperature(temp):
 
     if temp >= 36.5 and temp <= 37.5:
@@ -16,6 +21,10 @@ def checkTemperature(temp):
         return "Temperature: EMERGENCY"
 
 
+
+# =============================
+# PULSE CHECK
+# =============================
 def checkPulse(pulse):
 
     if pulse >=60 and pulse<=100:
@@ -28,6 +37,10 @@ def checkPulse(pulse):
         return "Pulse: CRITICAL"
 
 
+
+# =============================
+# OXYGEN SATURATION CHECK
+# =============================
 def checkOxygen(oxygen):
 
     if oxygen>=95:
@@ -39,7 +52,7 @@ def checkOxygen(oxygen):
         return "Oxygen Saturation: EMERGENCY"
 
 
-# method to generate alerts | takes the vitalObj as parameter and outputs the overall citals status
+# method to generate alerts | takes the vitalObj as parameter and outputs the overall Vitals status
 def generateAlert(vitalObj):
 
     alerts = []
@@ -47,6 +60,10 @@ def generateAlert(vitalObj):
     alerts.append(checkTemperature(vitalObj.temperature))
     alerts.append(checkPulse(vitalObj.pulse))
     alerts.append(checkOxygen(vitalObj.oxygen))
+
+    # =============================
+    # OVERALL ALERT GENERATION
+    # =============================
 
     if "EMERGENCY" in str(alerts):
         alerts.append("Overall Status : EMERGENCY - Immediate attention required.")
