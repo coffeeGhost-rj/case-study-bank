@@ -1,4 +1,4 @@
-from database import *
+from sample_data import *
 from AlertManager import *
 from Patient import *
 
