@@ -65,7 +65,7 @@ class Patient():
         if len(pName)<=0:
             raise ValueError("The name of the patient cannot be Empty!")
         else:
-            self.pName = pName
+            self.pName = pName.title()
 
     def set_age(self, age):
         if len(str(age))<=0 :
@@ -85,7 +85,7 @@ class Patient():
         if gender not in gender_opt:
             raise ValueError("The Specified Gender is invalid.")
         else:
-            self.gender = gender
+            self.gender = gender.title()
 
     def set_bg(self,bloodGrp):
 
@@ -103,14 +103,14 @@ class Patient():
         if patient_type not in patient_type_opt:
             raise ValueError("Invalid Patient type.")
         else:
-            self.patient_type = patient_type
+            self.patient_type = patient_type.title()
 
 
     def setDiagnosis(self, diagnosis):
         if len(diagnosis)<=0:
             raise ValueError("The diagnosis cannot empty.")
         else:
-            self.diagnosis = diagnosis
+            self.diagnosis = diagnosis.title()
 
 
     def setDoctor(self, docObj):
@@ -156,7 +156,7 @@ class InPatient(Patient):
         if len(ward)<=0:
             raise ValueError("The ward cannot be empty.")
         else:
-            self.ward = ward
+            self.ward = ward.title()
                 
     
     def setBed(self, bed):
@@ -191,14 +191,14 @@ class OutPatient(Patient):
         super().__init__(pName, age, gender, bloodGrp, patient_type, diagnosis, docObj)
 
         self.appointmentDate = datetime.now()
-        self.setConsultation_room(room) 
+        self.setConsultation_room(room.title()) 
 
 
     def setConsultation_room(self,room):
         if len(room)==0:
             raise ValueError("Consultation Room field cannot be Empty. Pls specify all details.")
         else:
-            self.room =room
+            self.room =room.title()
 
 
     # ---------------------------------

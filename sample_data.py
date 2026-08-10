@@ -42,6 +42,8 @@ vital1 = VitalSigns(38.8 , 125, 88)
 vital2 = VitalSigns(36.5, 75, 98)
 vital3 = VitalSigns(37.6 , 105 , 90 )
 
+# vitals = [vital1, vital2, vital3]
+
 
 # =======================================================
 # ASSOCIATING VITALSIGNS OBJECTS WITH PATIENT OBJECTS

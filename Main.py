@@ -1,6 +1,24 @@
 from sample_data import *
 from AlertManager import *
 from Patient import *
+from dataHandling import *
+
+# doctors = []
+# patients = []
+try:
+    # comment:
+    loaded_data = load_data()
+
+    # ``load_data`` is typed as returning either a 2-item or 3-item tuple,
+    # so handle both shapes explicitly before binding to the expected names.
+    if len(loaded_data) == 2:
+        doctors, patients = loaded_data
+        vitals = []
+    else:
+        doctors, patients, vitals = loaded_data
+except Exception as e:
+    print(e)
+# end try
 
 
 # ============================
@@ -234,7 +252,7 @@ def patientAccess():
 
     try:
         patient_ID = input("Enter Patient ID: " )
-        patient_name = input("Enter the Patient name: ")
+        # patient_name = input("Enter the Patient name: ") --- non-necessary ---
 
         # Retrieve the Patient object.
         patient = findpatient(patient_ID.upper())
@@ -362,14 +380,21 @@ showDoctors()
 showPatients()
 showVitals()
 
-input("\nPress Enter to Continue...")
+nullData =  input("\nPress Enter to Continue...")
+# try:
+#     # comment: 
+#     load_data()
+# except Exception as e:
+#     raise e
+
+# end try
 
 # =========================
 # MAIN MENU
 # =========================
 
 while True:
-
+    
     print("\n ------------------------")
     print("Doctor and Patient Records")
     print("\n ------------------------")
@@ -393,6 +418,7 @@ while True:
         
     elif option == "4":
         print("End of program.")
+        save_data(doctors, patients)
         break
 
     else:
