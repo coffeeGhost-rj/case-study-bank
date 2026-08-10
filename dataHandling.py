@@ -1,5 +1,9 @@
 import pickle
 import os
+
+from Patient import Patient
+from Doctor import Doctor
+
 # from sample_data import *
 
 DATA_FILE = "hospital_data.dat"
@@ -21,8 +25,24 @@ def save_data(doctors, patients):
 
 
 def load_data():
+    # if not os.path.exists(DATA_FILE):
+    #     return [], [], []
+
+
     if not os.path.exists(DATA_FILE):
-        return [], [], []
+
+        print("No saved data found.")
+        print("Creating initial hospital data...")
+
+        from sample_data import doctors, patients
+
+        # Save the initial sample data into the .dat file.
+        save_data(doctors, patients)
+
+        return doctors, patients
+
+
+
 
     try:
         with open(DATA_FILE, "rb") as file:
@@ -30,11 +50,29 @@ def load_data():
 
         doctors = data.get("doctors", [])
         patients = data.get("patients", [])
-        vitals = data.get("vitals", [])
+        #vitals = data.get("vitals", [])
+
+        if patients:
+
+            max_patient_id = max(
+                int(patient.patient_id[1:])
+                for patient in patients
+            )
+
+            Patient.p_ID = max_patient_id
+
+        if doctors:
+
+            max_doctor_id = max(
+                int(doctor.doc_ID[1:])
+                for doctor in doctors
+            )
+
+            Doctor.doc_ID = max_doctor_id
 
         print("Data loaded successfully.")
 
-        return doctors, patients, vitals
+        return doctors, patients
 
     except Exception as e:
         print("Error loading data:", e)
