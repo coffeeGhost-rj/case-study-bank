@@ -1,43 +1,49 @@
 # Case Study Bank - Patient Vital Signs Monitor
 
-This project is a small Python command-line prototype for monitoring patient vital signs and generating alert-based health summaries.
+This project is a small Python command-line prototype for monitoring patient vital signs, generating clinical-style status alerts, and simulating hospital patient/doctor access workflows.
 
 ## Project Purpose
-The application simulates a basic hospital information workflow where:
-- doctors can access patient reports
-- patients can read their own report
-- vital signs are validated and categorized into alert levels
-- sample records are loaded in memory for quick demonstration
+The application demonstrates an in-memory hospital information workflow where:
+- doctors can access patient records and add new patients
+- patients can be looked up through a patient access workflow
+- vital signs are validated and attached to a patient’s reading history
+- sample hospital records are loaded for quick demonstration in the console
 
 ## Current Features
-- `Patient`, `Doctor`, and `VitalSigns` model classes
-- Sample seed data for doctors and patients
-- Patient subclass support for inpatient and outpatient records
-- Unique patient ID generation per instance
-- Vital sign validation and report display
-- Alert generation for temperature, pulse, and oxygen saturation
-- Simple menu-based console interaction in the main program
+- `Patient`, `Doctor`, `VitalSigns`, and `AlertManager` model components
+- `InPatient` and `OutPatient` subclasses using inheritance and polymorphism
+- One-to-many patient-to-vital-sign association via `vitals_history`
+- Patient-specific methods for retrieving individual patient reports and the latest reading
+- Unique patient ID generation per instance through the `Patient.p_ID` counter
+- Vital sign validation for temperature, pulse, and oxygen saturation
+- Alert generation for each vital-sign reading using `generateAlert()`
+- Doctor-driven console operations for patient lookup, adding patients, and adding new readings
+- Menu-based interaction in the main program
 
 ## Files in the Project
-- [Main.py](Main.py) – application entry point and menu-driven user flow
-- [database.py](database.py) – creates the sample doctors, patient objects, and vital sign records
+- [Main.py](Main.py) – application entry point and menu-driven console workflow
+- [sample_data.py](sample_data.py) – creates sample doctors, patients, and initial vital sign records
 - [Patient.py](Patient.py) – patient base class plus `InPatient` and `OutPatient` subclasses
 - [Doctor.py](Doctor.py) – doctor class with validation and display helpers
 - [VitalSigns.py](VitalSigns.py) – vital signs model with input validation
-- [AlertManager.py](AlertManager.py) – logic for producing severity alerts
+- [AlertManager.py](AlertManager.py) – alert checks and severity classification helpers
 
 ## Current Behavior
-1. The program loads predefined doctor and patient records.
-2. It displays doctors, patients, and current vital reports.
-3. The user selects either doctor access or patient access.
-4. The selected patient’s details are printed with ward/bed or consultation-room information depending on patient type.
-5. Vital alerts are generated using the latest vital sign values.
+1. The program loads predefined doctor and patient objects from the sample dataset.
+2. It displays available doctors, available patients, and the current stored vital readings.
+3. The user chooses whether to enter the doctor workflow or patient workflow.
+4. The doctor workflow supports patient access, adding a new patient, and adding new vital-sign readings.
+5. The patient workflow prints the selected patient’s report and all historical readings with generated alerts.
 
-## Recent Update
-The patient display logic has been corrected so each created patient now shows its own unique generated `patient_id` in the final output, instead of reusing a shared class-level value.
+## Recent Updates
+The current implementation includes the following changes visible in the codebase:
+- `patient_id` generation is instance-based and increments correctly for each object created.
+- `Patient` objects now store a `vitals_history` list and can accept several `VitalSigns` readings over time.
+- The main program now supports adding new patient records and inserting a new vital-sign reading through the doctor menu.
+- Patient access can display both the summary information and each reading-specific alert result.
 
 ## Status
-This is a working prototype and learning project, not a full production hospital system. It uses in-memory objects and does not persist data to a real database.
+This is a working prototype and learning project rather than a production hospital system. It uses in-memory data structures and does not persist data to a database or external API.
 
 ## Run the Project
 From the project folder, run:
@@ -47,8 +53,8 @@ python Main.py
 ```
 
 ## Example Alert Logic
-- Temperature within safe range: normal
-- Slightly abnormal values: warning
-- Serious abnormal values: critical
-- Emergency-level values: immediate attention required
+- Temperature within a safe range is reported as `NORMAL`
+- Slightly abnormal values are reported as `WARNING`
+- Serious abnormal values are reported as `CRITICAL`
+- Emergency-level values are reported as `EMERGENCY` with immediate-attention messaging
 
