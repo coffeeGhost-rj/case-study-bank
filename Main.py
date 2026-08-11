@@ -1,29 +1,11 @@
-# doctors, patients = load_data()
-
-# # doctors = []
-# # patients = []
-# try:
-#     # comment:
-#     loaded_data = load_data()
-
-#     # ``load_data`` is typed as returning either a 2-item or 3-item tuple,
-#     # so handle both shapes explicitly before binding to the expected names.
-#     if len(loaded_data) == 2:
-#         doctors, patients = loaded_data
-#         vitals = []
-#     else:
-#         doctors, patients, vitals = loaded_data
-# except Exception as e:
-#     print(e)
-# # end try
 
 
+# from Functions.dataHandling import save_data, load_data
+# from Functions.AlertManager import *
+# from Functions.VitalSigns import *
 
-
-from dataHandling import save_data, load_data
-from AlertManager import *
-from Patient import *
-from VitalSigns import *
+from Users import *
+from Functions import *
 
 
 # ============================================================
@@ -183,7 +165,7 @@ def showVitals():
                     " bpm \n"
                     "Oxygen Saturation: " +
                     str(vital.oxygen) +
-                    "%"
+                    "%\n"
                 )
 
                 reading_num += 1
@@ -213,7 +195,8 @@ def updatePatientVitals():
         spo2 = int(input("Enter Oxygen Saturation (%): "))
 
         # Create a new VitalSigns object.
-        new_vitals = VitalSigns(temp, pulse, spo2)
+        new_vitals = VitalSigns(temp, pulse, spo2) # type: ignore
+        # new_vitals = VitalSigns
 
         # Associate the new VitalSigns object with the Patient.
         patient.setVitals(new_vitals)
@@ -316,30 +299,49 @@ def doctorAccess():
             option = input(
                 "Enter the option you would like to choose: "
             )
+            
+            match (int(option)):
+                case (1):
+                    # comment: Access a Patient Object
+                    patientAccess()
+                case (2):
+                    # comment: Create and add a new Patient object.
+                    addPatient()
+                case (3):
+                    # comment: Create and associate a new VitalSigns object.
+                    updatePatientVitals()
+                case (4):
+                    # comment: Exit Doctor's window
+                    print("Exiting the Doctor Window.....")
+                    break
+                case (_):
+                    # comment: 
+                    print("INVALID OPTION")
+            # end match
 
-            if option == "1":
+            # if option == "1":
 
-                # Access a Patient object.
-                patientAccess()
+            #     # Access a Patient object.
+            #     patientAccess()
 
-            elif option == "2":
+            # elif option == "2":
 
-                # Create and add a new Patient object.
-                addPatient()
+            #     # Create and add a new Patient object.
+            #     addPatient()
 
-            elif option == "3":
+            # elif option == "3":
 
-                # Create and associate a new VitalSigns object.
-                updatePatientVitals()
+            #     # Create and associate a new VitalSigns object.
+            #     updatePatientVitals()
 
-            elif option == "4":
+            # elif option == "4":
 
-                print("Exiting Doctor window.")
-                break
+            #     print("Exiting Doctor window.")
+            #     break
 
-            else:
+            # else:
 
-                print("Invalid option.")
+            #     print("Invalid option.")
 
     except LookupError as e:
 
@@ -415,7 +417,7 @@ def patientAccess():
             # Display each generated alert.
             for alert in alerts:
 
-                print(alert)
+                print(alert,"\n")
 
             reading_num += 1
 
@@ -602,7 +604,7 @@ def addPatient():
 
 showDoctors()
 showPatients()
-showVitals()
+# showVitals()
 
 
 input("\nPress Enter to Continue...")
@@ -628,48 +630,83 @@ while True:
         "Enter the option you would like to choose: "
     )
 
+    match (int(option)):
+        case (1):
+            # =========================
+            # DOCTOR ACCESS
+            # =========================
+            doctorAccess()
+        case (2):
+            # =========================
+            # PATIENT ACCESS
+            # =========================
+            patientAccess()
+        case (3):
+            # =========================
+            # VIEW VITALS
+            # =========================
+            showVitals()
+        case (4):
+            # =========================
+            #  EXIT
+            # =========================
+            
+            # Saving once more before exiting.
+            
+            save_data(doctors, patients)
 
-    # =========================
-    # DOCTOR ACCESS
-    # =========================
+            print("End of program.")
 
-    if option == "1":
-
-        doctorAccess()
-
-
-    # ==========================
-    # PATIENT ACCESS
-    # ==========================
-
-    elif option == "2":
-
-        patientAccess()
-
-
-    # ==========================
-    # VIEW VITALS
-    # ==========================
-
-    elif option == "3":
-
-        showVitals()
-
-
-    # ==================
-    # EXIT
-    # ==================
-
-    elif option == "4":
-
-        # Saving once more before exiting.
-        save_data(doctors, patients)
-
-        print("End of program.")
-
-        break
+            break
+        case (_):
+            # comment: 
+            print("INVALID OPTION")
+    # end match
 
 
-    else:
+# using if-else -----------------------------------------
 
-        print("Invalid option.")
+# =========================
+# DOCTOR ACCESS
+# =========================
+
+# if option == "1":
+
+#     doctorAccess()
+
+
+# ==========================
+# PATIENT ACCESS
+# ==========================
+
+# elif option == "2":
+
+#     patientAccess()
+
+
+# ==========================
+# VIEW VITALS
+# ==========================
+
+# elif option == "3":
+
+#     showVitals()
+
+
+# ==================
+# EXIT
+# ==================
+
+# elif option == "4":
+
+#     # Saving once more before exiting.
+#     save_data(doctors, patients)
+
+#     print("End of program.")
+
+#     break
+
+
+# else:
+
+#     print("Invalid option.")

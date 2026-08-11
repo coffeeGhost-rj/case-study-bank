@@ -1,15 +1,19 @@
 class Doctor():
 
-    #auto generating the Doc ID
-    doc_ID = 100
+    # Auto-generating a unique Doctor ID.
+    # Use a separate counter for class-level state so the instance
+    # attribute `doc_ID` is always a string and never conflicts with the
+    # numeric counter type used for increments.
+    _doc_ID = 100
 
     def __init__(self, name, specialization):
 
         # Increment the class variable for every new doctor.
-        Doctor.doc_ID+=1
+        # Use the type of the counter explicitly in the arithmetic.
+        Doctor._doc_ID = int(Doctor._doc_ID) + 1
 
         # Each Doctor object gets its own unique Doctor ID.
-        self.doc_ID = "D" + str(Doctor.doc_ID)
+        self.doc_ID = "D" + str(Doctor._doc_ID)
 
         # Using setter methods to validate and assign data.
         

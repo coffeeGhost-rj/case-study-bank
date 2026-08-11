@@ -1,6 +1,6 @@
-from Doctor import *
-from Patient import *
-from VitalSigns import *
+from Users.Doctor import *
+from Users.Patient import *
+from Functions.VitalSigns import *
 
 # ============================
 # CREATING DOCTOR OBJECTS

@@ -1,12 +1,19 @@
-import pickle
+from Users import Doctor, Patient
+from phi import doctors, patients
+
 import os
+import pickle
+import sys
+from pathlib import Path
 
-from Patient import Patient
-from Doctor import Doctor
+# When this file is launched as a script (for example, python Functions/dataHandling.py),
+# Python puts the Functions directory on sys.path first. That prevents Users and phi
+# from being resolved unless the repository root is explicitly added to the import path.
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-# from sample_data import *
-
-DATA_FILE = "hospital_data.dat"
+DATA_FILE = PROJECT_ROOT / "phi" / "hospital_data.dat"
 
 
 def save_data(doctors, patients):
@@ -34,7 +41,7 @@ def load_data():
         print("No saved data found.")
         print("Creating initial hospital data...")
 
-        from sample_data import doctors, patients
+        from phi.sample_data import doctors, patients
 
         # Save the initial sample data into the .dat file.
         save_data(doctors, patients)
@@ -59,7 +66,7 @@ def load_data():
                 for patient in patients
             )
 
-            Patient.p_ID = max_patient_id
+            setattr(Patient, "p_ID", max_patient_id)
 
         if doctors:
 
@@ -68,7 +75,7 @@ def load_data():
                 for doctor in doctors
             )
 
-            Doctor.doc_ID = max_doctor_id
+            setattr(Doctor, "doc_ID", max_doctor_id)
 
         print("Data loaded successfully.")
 
@@ -86,9 +93,9 @@ def load_data():
 
 # vitals = load_data()[2]
 
-for p in load_data()[1]:
-    print(p.patient_id)
-    print(p.pName)
+# for p in load_data()[1]:
+#     print(p.patient_id)
+#     print(p.pName)
     
 
 # for p in load_data()[2]:
