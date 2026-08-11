@@ -3,13 +3,15 @@ from datetime import datetime
 # This class represents one recorded set of vital signs for a patient.
 
 class VitalSigns():
-    def __init__(self, temp, pulse,spo2):
+    def __init__(self, temp, pulse,spo2, recorded_by=None):
         self.setTemp(temp)
         self.setPulse(pulse)
         self.setOxygen(spo2)
 
         # Stores the exact date and time when this reading was created.
         self.recorded_time = datetime.now()
+
+        self.recorded_by = recorded_by
 
     def setTemp(self,temp):
         if temp < 30 or temp > 45:
@@ -30,11 +32,34 @@ class VitalSigns():
             self.oxygen = spo2
 
 
-    def showVitalDetails(self):
+    # def showVitalDetails(self):
         
-        return ("Temperature: " + str(self.temperature)+ "°C" +
-                "\nPulse: " + str(self.pulse) + "bpm" +
-                "\nOxygen saturation : " + str(self.oxygen) + "%" +
-                "\nRecorded Time: " + self.recorded_time.strftime("%d-%m-%Y  %H:%M:%S")
-                )
+    #     return ("Temperature: " + str(self.temperature)+ "°C" +
+    #             "\nPulse: " + str(self.pulse) + "bpm" +
+    #             "\nOxygen saturation : " + str(self.oxygen) + "%" +
+    #             "\nRecorded Time: " + self.recorded_time.strftime("%d-%m-%Y  %H:%M:%S")
+    #             )
+
+    def showVitalDetails(self):
+
+        vital_details = (
+            "Temperature: " + str(self.temperature) + "°C" +
+            "\nPulse: " + str(self.pulse) + "bpm" +
+            "\nOxygen saturation : " + str(self.oxygen) + "%" +
+            "\nRecorded Time: " +
+            self.recorded_time.strftime("%d-%m-%Y  %H:%M:%S")
+        )
+
+        # Display staff details only when a staff member
+        # has recorded the reading.
+        if self.recorded_by is not None:
+
+            vital_details = (
+                vital_details +
+                "\nRecorded By: " + self.recorded_by.name +
+                "\nStaff ID: " + self.recorded_by.u_id +
+                "\nDesignation: " + self.recorded_by.designation
+            )
+
+        return vital_details
         

@@ -180,7 +180,7 @@ def showVitals(patients):
 # ASSOCIATION: One Patient --> Many VitalSigns objects
 # ============================================================
 
-def updatePatientVitals():
+def updatePatientVitals(staff = None):
 
     try:
 
@@ -197,7 +197,11 @@ def updatePatientVitals():
         spo2 = int(input("Enter Oxygen Saturation (%): "))
 
         # Create a new VitalSigns object.
-        new_vitals = VitalSigns(temp, pulse, spo2) # type: ignore
+        new_vitals = VitalSigns(
+            temp, 
+            pulse, 
+            spo2,
+            recorded_by = staff) # type: ignore
         # new_vitals = VitalSigns
 
         # Associate the new VitalSigns object with the Patient.
@@ -214,6 +218,25 @@ def updatePatientVitals():
             "Reading count: " +
             str(len(patient.vitals_history))
         )
+
+        # Display who recorded the reading.
+        if staff is not None:
+
+            print(
+                "Recorded By:",
+                staff.name
+            )
+
+            print(
+                "Staff ID:",
+                staff.u_id
+            )
+
+            print(
+                "Designation:",
+                staff.designation
+            )
+
 
     except LookupError as e:
 
@@ -236,15 +259,15 @@ def updatePatientVitals():
 # ============================================================
 # Creates either an InPatient or an OutPatient object.
 
-def addPatient():
+def addPatient(patients, doctors, patient_type):
 
     try:
 
-        patient_type = input(
-            "Enter the patient type: "
-        )
+        # patient_type = input(
+        #     "Enter the patient type: "
+        # )
 
-        print(patient_type.title())
+        # print(patient_type.title())
 
         doctor_id = input(
             "Enter the Doctor ID to assign the patient: "
@@ -574,7 +597,7 @@ def patientAccess(patients):
 
         print("Invalid details:", e)
 
-def pmsAccess(pStaff, patients):
+def pmsAccess(pStaff, patients,doctors):
 
     try:
 
@@ -583,46 +606,106 @@ def pmsAccess(pStaff, patients):
         # Finding the corresponding Doctor object.
         staff = findUser(pms_id.upper(), pStaff)
         
-        print("\n",staff.name,"\n")
+        #print("\n",staff.name,"\n")
+
+
+
+        print("\n================================")
+        print("Welcome", staff.name + "!")
+        print("Staff ID:", staff.u_id)
+        print("Designation:", staff.designation)
+        print("================================")
 
 
         # ====================================================
-        # DOCTOR MENU
+        # NURSE ACCESS
         # ====================================================
 
-        while True:
+        if staff.designation.title() == "Nurse":
 
-            print("----- Staff Window ----")
+            print("\nYou have access to update patient vitals.")
 
-            print("1. Patient Access")
-            print("2. Add Patient")
-            print("3. Update Patient Vital Signs (New Reading)")
-            print("4. Exit from Staff window.")
-            print("\n")
+            while True:
 
-            option = input(
-                "Enter the option you would like to choose: "
+                print("\n----- Nurse Window -----")
+                print("1. Update Patient Vital Signs")
+                print("2. Exit")
+                print()
+
+                option = input(
+                    "Enter the option you would like to choose: "
+                )
+
+                match int(option):
+
+                    case 1:
+                        updatePatientVitals(staff)
+
+                    case 2:
+                        print("\nExiting the Nurse Window.....")
+                        break
+
+                    case _:
+                        print("INVALID OPTION")
+
+        # ====================================================
+        # RECEPTIONIST ACCESS
+        # ====================================================
+
+        elif staff.designation.title() == "Receptionist":
+
+            print("\nYou have access to add patients.")
+
+            while True:
+
+                print("\n----- Receptionist Window -----")
+                print("1. Add Inpatient")
+                print("2. Add Outpatient")
+                print("3. Exit")
+                print()
+
+                option = input(
+                    "Enter the option you would like to choose: "
+                )
+
+                match int(option):
+
+                    case 1:
+
+                        addPatient(
+                            patients,
+                            doctors,
+                            "Inpatient"
+                        )
+
+                    case 2:
+
+                        addPatient(
+                            patients,
+                            doctors,
+                            "Outpatient"
+                        )
+
+                    case 3:
+                        print(
+                            "\nExiting the Receptionist Window....."
+                        )
+                        break
+
+                    case _:
+                        print("INVALID OPTION")
+
+        # ====================================================
+        # OTHER DESIGNATION
+        # ====================================================
+
+        else:
+
+            print("\nAccess denied.")
+            print(
+                "This staff designation does not have "
+                "assigned system permissions."
             )
-            
-            match (int(option)):
-                case (1):
-                    # comment: Access a Patient Object
-                    patientAccess(patients)
-                case (2):
-                    # comment: Create and add a new Patient object.
-                    addPatient()
-                case (3):
-                    # comment: Create and associate a new VitalSigns object.
-                    updatePatientVitals()
-                case (4):
-                    # comment: Exit Doctor's window
-                    print("Exiting the Staff Window.....")
-                    break
-                case (_):
-                    # comment: 
-                    print("INVALID OPTION")
-            # end match
-
 
     except LookupError as e:
 
@@ -630,4 +713,56 @@ def pmsAccess(pStaff, patients):
 
     except ValueError as e:
 
-        print("Invalid doctor details:", e)
+        print("Invalid staff details:", e)
+
+    except Exception as e:
+
+        print("An unexpected error occurred:", e)
+
+
+
+        # ====================================================
+        # DOCTOR MENU
+        # ====================================================
+
+    #     while True:
+
+    #         print("----- Staff Window ----")
+
+    #         print("1. Patient Access")
+    #         print("2. Add Patient")
+    #         print("3. Update Patient Vital Signs (New Reading)")
+    #         print("4. Exit from Staff window.")
+    #         print("\n")
+
+    #         option = input(
+    #             "Enter the option you would like to choose: "
+    #         )
+            
+    #         match (int(option)):
+    #             case (1):
+    #                 # comment: Access a Patient Object
+    #                 patientAccess(patients)
+    #             case (2):
+    #                 # comment: Create and add a new Patient object.
+    #                 addPatient()
+    #             case (3):
+    #                 # comment: Create and associate a new VitalSigns object.
+    #                 updatePatientVitals()
+    #             case (4):
+    #                 # comment: Exit Doctor's window
+    #                 print("Exiting the Staff Window.....")
+    #                 break
+    #             case (_):
+    #                 # comment: 
+    #                 print("INVALID OPTION")
+    #         # end match
+
+
+    # except LookupError as e:
+
+    #     print("Error:", e)
+
+    # except ValueError as e:
+
+    #     print("Invalid doctor details:", e)

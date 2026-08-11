@@ -69,7 +69,7 @@ while True:
             # =========================
             # Staff Access
             # =========================
-            pmsAccess(pStaff, patients)
+            pmsAccess(pStaff, patients,doctors)
         case (4):
             # =========================
             #  EXIT
