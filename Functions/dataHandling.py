@@ -1,5 +1,5 @@
 from Users import Doctor, Patient
-from phi import doctors, patients
+# from phi import doctors, patients
 
 import os
 import pickle
@@ -58,6 +58,14 @@ def load_data():
         doctors = data.get("doctors", [])
         patients = data.get("patients", [])
         #vitals = data.get("vitals", [])
+
+        for doctor in doctors:
+            if not hasattr(doctor, "u_id"):
+                doctor.u_id = doctor.doc_ID
+
+        for patient in patients:
+            if not hasattr(patient, "u_id"):
+                patient.u_id = patient.patient_id
 
         if patients:
 

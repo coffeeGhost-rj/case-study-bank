@@ -15,8 +15,10 @@ class Doctor():
         # Each Doctor object gets its own unique Doctor ID.
         self.doc_ID = "D" + str(Doctor._doc_ID)
 
+        # Unified lookup ID used by the common doctor/patient finder.
+        self.u_id = self.doc_ID
+
         # Using setter methods to validate and assign data.
-        
         self.setName(name)
         self.setSpeciality(specialization)
 
@@ -41,7 +43,7 @@ class Doctor():
     # ===================================
     def showDoctorDetails(self):
 
-        return ("Doctor ID: ", self.doc_ID ,
+        return ("Doctor ID: ", self.u_id ,
                 "\n Doctor Name: " , self.name ,
                 "\n Specialization: ", self.specialization)
         
