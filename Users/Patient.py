@@ -4,8 +4,11 @@ from datetime import datetime
 class Patient():
     p_ID = 1000
     def __init__(self, pName, age, gender, bloodGrp, patient_type, diagnosis, docObj):
-        Patient.p_ID+=1
-        self.patient_id = "P"+ str(Patient.p_ID)
+        Patient.p_ID += 1
+        self.patient_id = "P" + str(Patient.p_ID)
+
+        # Unified lookup ID used by the common doctor/patient finder.
+        self.u_id = self.patient_id
 
         self.set_age(age)
         self.set_pname(pName)
@@ -122,7 +125,7 @@ class Patient():
 
     def showPatientDetails(self):
         return (
-            "Patient ID: " + str(self.patient_id) +
+            "Patient ID: " + str(self.u_id) +
             "\nName: " + self.pName +
             "\nGender: " + self.gender +
             "\nAge: " + str(self.age) +

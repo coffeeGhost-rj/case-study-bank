@@ -10,41 +10,50 @@ The application demonstrates a lightweight hospital record workflow where:
 - sample data can be loaded through the dataset/setup layer and saved back to a local binary data file
 
 ## Current Features
-- `Patient`, `Doctor`, `VitalSigns`, and `AlertManager` model components
+- `Patient`, `Doctor`, `PermittedStaff`, `VitalSigns`, and `AlertManager` model components
 - `InPatient` and `OutPatient` subclasses using inheritance and polymorphism
 - One-to-many patient-to-vital-sign association via `vitals_history`
 - Patient-specific methods for returning report text, historical vital logs, and the latest reading
-- Unique patient ID generation through the `Patient.p_ID` counter and ID strings such as `P1001`
-- Doctor ID generation through the `Doctor.doc_ID` counter and ID strings such as `D101`
+- Unified user lookup contract: doctors, patients, and permitted staff expose a `u_id` attribute used by the shared `findUser()` lookup routine
+- Unique patient ID generation through the `Patient.p_ID` counter and `patient_id` attributes such as `P1001`
+- Doctor ID generation through the `Doctor.doc_ID` counter and `doc_ID` attributes such as `D101`
+- Staff ID generation through `PermittedStaff.pms_ID` and `u_id` aliases for the staff lookup layer
+- `u_id` is populated from the concrete identifiers so doctor, patient, and staff records can be resolved through a single lookup function
 - Vital sign validation for temperature, pulse, and oxygen saturation
 - Alert generation for each reading through `generateAlert()` and severity classification helpers
 - Doctor-driven console operations for patient lookup, adding patients, and adding new readings
+- Permitted-staff workflow via `pmsAccess()` to open a staff console with patient access and patient-record updates
 - Menu-driven access in the main program's top-level workflow
-- Pickle-based persistence through `save_data()` and `load_data()` in the data handling layer
+- Pickle-based persistence through `save_data()` and `load_data()` in the data handling layer, now returning `doctors`, `patients`, and `pStaff`
 
 ## Files in the Project
 - [Main.py](Main.py) – application entry point and menu-driven console workflow
-- [dataHandling.py](dataHandling.py) – local persistent data layer using pickle save/load helpers
-- [sample_data.py](sample_data.py) – creates sample doctors, patients, and initial vital sign readings
-- [Patient.py](Patient.py) – base `Patient` model plus `InPatient` and `OutPatient` subclasses
-- [Doctor.py](Doctor.py) – doctor class with validation and display helpers
-- [VitalSigns.py](VitalSigns.py) – vital-sign model with input validation and recorded timestamp support
-- [AlertManager.py](AlertManager.py) – vital-sign checks and overall alert classification
+- [Functions/dataHandling.py](Functions/dataHandling.py) – local persistent data layer using pickle save/load helpers
+- [Functions/accessability.py](Functions/accessability.py) – user-facing access workflows such as `findUser()`, `showDoctors()`, `showPatients()`, `showVitals()`, and `pmsAccess()`
+- [phi/sample_data.py](phi/sample_data.py) – creates sample doctors, patients, initial vital sign readings, and permitted staff records
+- [Users/Patient.py](Users/Patient.py) – base `Patient` model plus `InPatient` and `OutPatient` subclasses
+- [Users/Doctor.py](Users/Doctor.py) – doctor class with validation and display helpers
+- [Users/PermittedStaff.py](Users/PermittedStaff.py) – permitted-staff model with `pms_ID` and `u_id` aliasing
+- [Functions/VitalSigns.py](Functions/VitalSigns.py) – vital-sign model with input validation and recorded timestamp support
+- [Functions/AlertManager.py](Functions/AlertManager.py) – vital-sign checks and overall alert classification
 
 ## Current Behavior
-1. The program attempts to load stored hospital data through `load_data()` from the persistent data layer.
-2. It displays available doctors, available patients, and the current vital records for each patient.
-3. The user can choose between doctor access, patient access, view-all-vitals summary, or program exit.
-4. The doctor workflow supports patient lookup, adding a new patient, and inserting a fresh `VitalSigns` reading through the patient history list.
+1. The program attempts to load stored hospital data through `load_data()` from the persistent data layer and normalizes any legacy records to include `u_id` before returning them.
+2. It displays available doctors, available patients, and the current vital records for each patient using the shared `u_id` contract.
+3. The user can choose between doctor access, patient access, permitted staff access, or program exit.
+4. The doctor workflow supports patient lookup through the common `findUser()` helper, updating vitals, and reviewing patient data through the same access layer.
 5. The patient workflow prints the selected patient's report and all historical readings with generated status alerts.
-6. When the user exits the program, the current doctor and patient collections are saved via `save_data()` to a local binary file.
+6. The permitted staff workflow accepts a staff ID and enters a staff-only menu that mirrors doctor access options for patient retrieval and record updates.
+7. When the user exits the program, the current doctor, patient, and permitted staff collections are saved via `save_data()` to the same binary persistence file.
 
 ## Data Persistence
 The latest implementation adds a persistence layer that serializes the in-memory hospital objects using Python's `pickle` module.
 
 - The file used for persistence is `hospital_data.dat`.
-- [dataHandling.py](dataHandling.py) contains the `save_data()` and `load_data()` functions.
-- The `Main.py` program reads the saved doctor and patient records at startup and writes them back on exit.
+- [Functions/dataHandling.py](Functions/dataHandling.py) contains the `save_data()` and `load_data()` functions.
+- The `load_data()` routine now returns a three-part tuple: `doctors`, `patients`, and `pStaff`.
+- The `save_data()` routine stores those three collections under the same top-level persistence schema.
+- The `Main.py` program reads the saved doctor, patient, and permitted staff records at startup and writes them back on exit.
 
 ## Example Alert Logic
 - Temperature within a safe range is reported as `NORMAL`
