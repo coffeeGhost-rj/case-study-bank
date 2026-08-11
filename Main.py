@@ -11,7 +11,14 @@ from Functions import *
 
 # FUTURE RUNS: Existing doctors and patients are loaded from the hospital_data.dat file.
 
-doctors, patients = load_data()
+doctors, patients, pStaff = load_data()
+
+# Synchronize the runtime collection objects into the access layer module so its
+# display and workflow functions see the same in-memory lists as Main.py.
+# import Functions.accessability as accessability
+# accessability.doctors = doctors
+# accessability.patients = patients
+# accessability.pStaff = pStaff
 
 
 # ============================================================
@@ -20,8 +27,8 @@ doctors, patients = load_data()
 # Display the current data after loading it from the file.
 # ============================================================
 
-showDoctors()
-showPatients()
+showDoctors(patients)
+showPatients(patients)
 
 
 input("\nPress Enter to Continue...")
@@ -39,7 +46,7 @@ while True:
 
     print("1. Doctor access")
     print("2. Patient Access")
-    print("3. View All Current Vitals Summary")
+    print("3. Permitted Staff Access")
     print("4. Exit")
     print("\n")
 
@@ -52,24 +59,24 @@ while True:
             # =========================
             # DOCTOR ACCESS
             # =========================
-            doctorAccess()
+            doctorAccess(doctors,patients)
         case (2):
             # =========================
             # PATIENT ACCESS
             # =========================
-            patientAccess()
+            patientAccess(patients)
         case (3):
             # =========================
-            # VIEW VITALS
+            # Staff Access
             # =========================
-            showVitals()
+            pmsAccess(pStaff, patients)
         case (4):
             # =========================
             #  EXIT
             # =========================
             
             # Saving once more before exiting.
-            save_data(doctors, patients)
+            save_data(doctors, patients, pStaff)
 
             print("End of program.")
 

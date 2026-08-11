@@ -1,5 +1,6 @@
 from Users.Doctor import *
 from Users.Patient import *
+from Users.PermittedStaff import PermittedStaff
 from Functions.VitalSigns import *
 
 # ============================
@@ -59,3 +60,15 @@ patient3.setVitals(vital3)
 patients = [patient1, patient2 , patient3]
 # for p in patients:
 #     print(p.showPatientDetails())
+
+# =======================================================
+# CREATING PERMITTED STAFF MEMBERS
+# =======================================================
+# These are sample staff records used for the staff lookup workflow.
+# The 3-member initial list includes two nurses and one receptionist.
+
+nurse1 = PermittedStaff("Nurse Alice", "Nurse")
+nurse2 = PermittedStaff("Nurse Bob", "Nurse")
+receptionist = PermittedStaff("Reception Desk", "Receptionist")
+
+pStaff = [nurse1, nurse2, receptionist]

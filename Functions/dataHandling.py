@@ -1,6 +1,3 @@
-from Users import Doctor, Patient
-# from phi import doctors, patients
-
 import os
 import pickle
 import sys
@@ -13,16 +10,20 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from Users import Doctor, Patient, PermittedStaff
+# from phi import doctors, patients, pStaff
+
 DATA_FILE = PROJECT_ROOT / "phi" / "hospital_data.dat"
 
 
-def save_data(doctors, patients):
+def save_data(doctors, patients, pStaff):
     try:
         with open(DATA_FILE, "wb") as file:
             pickle.dump(
                 {
                     "doctors": doctors,
-                    "patients": patients
+                    "patients": patients,
+                    "pStaff": pStaff
                 },
                 file
             )
@@ -41,12 +42,12 @@ def load_data():
         print("No saved data found.")
         print("Creating initial hospital data...")
 
-        from phi.sample_data import doctors, patients
+        from phi import doctors,patients,pStaff
 
         # Save the initial sample data into the .dat file.
-        save_data(doctors, patients)
+        save_data(doctors, patients, pStaff)
 
-        return doctors, patients
+        return doctors, patients, pStaff
 
 
 
@@ -57,7 +58,7 @@ def load_data():
 
         doctors = data.get("doctors", [])
         patients = data.get("patients", [])
-        #vitals = data.get("vitals", [])
+        pStaff = data.get("pStaff", data.get("staffs", []))
 
         for doctor in doctors:
             if not hasattr(doctor, "u_id"):
@@ -66,6 +67,10 @@ def load_data():
         for patient in patients:
             if not hasattr(patient, "u_id"):
                 patient.u_id = patient.patient_id
+                
+        for staff in pStaff:
+            if not hasattr(staff, "u_id"):
+                staff.u_id = staff.pms_ID
 
         if patients:
 
@@ -75,6 +80,15 @@ def load_data():
             )
 
             setattr(Patient, "p_ID", max_patient_id)
+            
+        if pStaff:
+        
+            max_staff_id = max(
+                int(staff.pms_ID[1:])
+                for staff in pStaff
+            )
+
+            setattr(PermittedStaff, "pms_ID", max_staff_id)
 
         if doctors:
 
@@ -87,25 +101,30 @@ def load_data():
 
         print("Data loaded successfully.")
 
-        return doctors, patients
+        return doctors, patients, pStaff
 
     except Exception as e:
         print("Error loading data:", e)
-        return [], []
+        return [], [], []
     
     
 # -----  Data Testing -------
-# load_data()
-# save_data(doctors, patients)
-# print(load_data()[1][-1].patient_id)
+# This module is intentionally import-safe. Any quick checks should run under
+# __main__ instead of being executed at import time.
+if __name__ == "__main__":
+    doctors, patients, pStaff = load_data()
+    for s in pStaff:
+        print(s.u_id)
+        print(s.name)
+#  --------------------------------------------------
+    # from phi.sample_data import doctors, patients, pStaff
+    # save_data(doctors, patients, pStaff)
+    # print("Loaded staff count:", len(load_data()[2]))
 
-# vitals = load_data()[2]
-
-# for p in load_data()[1]:
-#     print(p.patient_id)
-#     print(p.pName)
-    
 
 # for p in load_data()[2]:
-    # print(p.patient_id)
-    # print(p.pName)
+#     print(p.u_id)
+#     print(p.name)
+
+# doctors, patients, pStaff = load_data()
+    

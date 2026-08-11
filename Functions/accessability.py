@@ -1,8 +1,13 @@
+from Users import InPatient, OutPatient
+from Functions.dataHandling import save_data
+from Functions.AlertManager import generateAlert
+from Functions.VitalSigns import VitalSigns
 
-from Users import *
-from Functions import *
-
-doctors, patients = load_data()
+# Runtime state is initialized by Main.py via load_data() and then
+# synchronized into these module-level collections.
+doctors = []
+patients = []
+pStaff = []
 
 def findUser(uid, datalist):
 
@@ -65,7 +70,7 @@ def findUser(uid, datalist):
 # Therefore: Many Patients --> One Doctor
 # ============================================================
 
-def showDoctors():
+def showDoctors(patients):
 
     print("\nAvailable Doctors")
     print("-" * 40)
@@ -96,7 +101,7 @@ def showDoctors():
 # DISPLAY PATIENTS
 # ============================================================
 
-def showPatients():
+def showPatients(patients):
 
     print("\nAvailable Patients")
     print("-" * 40)
@@ -119,7 +124,7 @@ def showPatients():
 # ONE-TO-MANY ASSOCIATION: One Patient --> Many VitalSigns objects
 # ============================================================
 
-def showVitals():
+def showVitals(patients):
 
     print("\nCurrent Vital Records")
     print("-" * 40)
@@ -202,7 +207,7 @@ def updatePatientVitals():
         # SAVE UPDATED DATA
         # --------------------------
 
-        save_data(doctors, patients)
+        save_data(doctors, patients,pStaff)
 
         print(
             "[SUCCESS] New reading added successfully! "
@@ -300,7 +305,7 @@ def addPatient():
             # SAVE UPDATED DATA
             # ---------------------
 
-            save_data(doctors, patients)
+            save_data(doctors, patients, pStaff)
 
             print("\n ------------------------")
             print(
@@ -361,7 +366,7 @@ def addPatient():
             patients.append(newpatient)
 
             # Saving the updated data to the .dat file.
-            save_data(doctors, patients)
+            save_data(doctors, patients, pStaff )
 
             print("\n ------------------------")
             print(
@@ -391,7 +396,7 @@ def addPatient():
 
         print("Record error:", e)
 
-def doctorAccess():
+def doctorAccess(doctors, patients):
 
     print("\n ------------------------")
     print(
@@ -454,9 +459,9 @@ def doctorAccess():
             print("---- Patient Records ----")
 
             print("1. Patient Access")
-            print("2. Add Patient")
-            print("3. Update Patient Vital Signs (New Reading)")
-            print("4. Exit from Doctor window.")
+            # print("2. Add Patient")
+            print("2. Update Patient Vital Signs (New Reading)")
+            print("3. Exit from Doctor window.")
             print("\n")
 
             option = input(
@@ -466,16 +471,16 @@ def doctorAccess():
             match (int(option)):
                 case (1):
                     # comment: Access a Patient Object
-                    patientAccess()
+                    patientAccess(patients)
                 case (2):
                     # comment: Create and add a new Patient object.
-                    addPatient()
-                case (3):
+                #     addPatient()
+                # case (3):
                     # comment: Create and associate a new VitalSigns object.
                     updatePatientVitals()
-                case (4):
+                case (3):
                     # comment: Exit Doctor's window
-                    print("Exiting the Doctor Window.....")
+                    print("\n","Exiting the Doctor Window.....")
                     break
                 case (_):
                     # comment: 
@@ -496,7 +501,7 @@ def doctorAccess():
 # PATIENT ACCESS
 # ============================================================
 
-def patientAccess():
+def patientAccess(patients):
 
     print("\n ------------------------")
     print(
@@ -569,3 +574,60 @@ def patientAccess():
 
         print("Invalid details:", e)
 
+def pmsAccess(pStaff, patients):
+
+    try:
+
+        pms_id = input("Enter the staff ID: ")
+
+        # Finding the corresponding Doctor object.
+        staff = findUser(pms_id.upper(), pStaff)
+        
+        print("\n",staff.name,"\n")
+
+
+        # ====================================================
+        # DOCTOR MENU
+        # ====================================================
+
+        while True:
+
+            print("----- Staff Window ----")
+
+            print("1. Patient Access")
+            print("2. Add Patient")
+            print("3. Update Patient Vital Signs (New Reading)")
+            print("4. Exit from Staff window.")
+            print("\n")
+
+            option = input(
+                "Enter the option you would like to choose: "
+            )
+            
+            match (int(option)):
+                case (1):
+                    # comment: Access a Patient Object
+                    patientAccess(patients)
+                case (2):
+                    # comment: Create and add a new Patient object.
+                    addPatient()
+                case (3):
+                    # comment: Create and associate a new VitalSigns object.
+                    updatePatientVitals()
+                case (4):
+                    # comment: Exit Doctor's window
+                    print("Exiting the Staff Window.....")
+                    break
+                case (_):
+                    # comment: 
+                    print("INVALID OPTION")
+            # end match
+
+
+    except LookupError as e:
+
+        print("Error:", e)
+
+    except ValueError as e:
+
+        print("Invalid doctor details:", e)
