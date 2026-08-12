@@ -124,13 +124,13 @@ def showPatients(patients):
 # ONE-TO-MANY ASSOCIATION: One Patient --> Many VitalSigns objects
 # ============================================================
 
-def showVitals(patients):
+def showVitals(patientsList):
 
     print("\nCurrent Vital Records")
     print("-" * 40)
 
     # Iterate through every Patient object.
-    for patient in patients:
+    for patient in patientsList:
 
         # Check whether the patient has any recorded vitals.
         if len(patient.vitals_history) == 0:
@@ -180,14 +180,14 @@ def showVitals(patients):
 # ASSOCIATION: One Patient --> Many VitalSigns objects
 # ============================================================
 
-def updatePatientVitals(staff = None):
+def updatePatientVitals(staff, patientsList):
 
     try:
 
         patient_ID = input("Enter Patient ID to update: ")
 
         # Find the Patient object.
-        patient = findUser(patient_ID.upper(),patients)
+        patient = findUser(patient_ID.upper(),patientsList)
 
         print("\nUpdating Vitals for " + patient.pName)
 
@@ -419,7 +419,7 @@ def addPatient(patients, doctors, patient_type):
 
         print("Record error:", e)
 
-def doctorAccess(doctors, patients):
+def doctorAccess(doctorsList , patientsList, staffList):
 
     print("\n ------------------------")
     print(
@@ -433,7 +433,7 @@ def doctorAccess(doctors, patients):
         doctor_id = input("Enter the Doctor ID: ")
 
         # Finding the corresponding Doctor object.
-        doctor = findUser(doctor_id.upper(), doctors)
+        doctor = findUser(doctor_id.upper(), doctorsList)
 
         inpatient_count = 0
         outpatient_count = 0
@@ -494,13 +494,13 @@ def doctorAccess(doctors, patients):
             match (int(option)):
                 case (1):
                     # comment: Access a Patient Object
-                    patientAccess(patients)
+                    patientAccess(patientsList)
                 case (2):
                     # comment: Create and add a new Patient object.
                 #     addPatient()
                 # case (3):
                     # comment: Create and associate a new VitalSigns object.
-                    updatePatientVitals()
+                    updatePatientVitals(staffList, patientsList)
                 case (3):
                     # comment: Exit Doctor's window
                     print("\n","Exiting the Doctor Window.....")
@@ -639,7 +639,7 @@ def pmsAccess(pStaff, patients,doctors):
                 match int(option):
 
                     case 1:
-                        updatePatientVitals(staff)
+                        updatePatientVitals(staff,patients)
 
                     case 2:
                         print("\nExiting the Nurse Window.....")

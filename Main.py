@@ -59,7 +59,7 @@ while True:
             # =========================
             # DOCTOR ACCESS
             # =========================
-            doctorAccess(doctors,patients)
+            doctorAccess(doctors,patients,pStaff)
         case (2):
             # =========================
             # PATIENT ACCESS
