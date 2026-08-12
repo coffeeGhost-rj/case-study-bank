@@ -52,13 +52,14 @@ class VitalSigns():
 
         # Display staff details only when a staff member
         # has recorded the reading.
-        if self.recorded_by is not None:
+        recorded_by = getattr(self, "recorded_by", None)
+        if recorded_by is not None:
 
             vital_details = (
                 vital_details +
-                "\nRecorded By: " + self.recorded_by.name +
-                "\nStaff ID: " + self.recorded_by.u_id +
-                "\nDesignation: " + self.recorded_by.designation
+                "\nRecorded By: " + recorded_by.name +
+                "\nStaff ID: " + recorded_by.u_id +
+                "\nDesignation: " + recorded_by.designation
             )
 
         return vital_details

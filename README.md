@@ -44,7 +44,8 @@ The application demonstrates a lightweight hospital record workflow where:
 4. The doctor workflow supports patient lookup through the common `findUser()` helper, updating vitals, and reviewing patient data through the same access layer.
 5. The patient workflow prints the selected patient's report and all historical readings with generated status alerts.
 6. The permitted staff workflow accepts a staff ID and enters a staff-only menu that mirrors doctor access options for patient retrieval and record updates.
-7. When the user exits the program, the current doctor, patient, and permitted staff collections are saved via `save_data()` to the same binary persistence file.
+7. The vital-sign display logic now safely handles legacy records that may not include a `recorded_by` staff reference, avoiding runtime attribute errors.
+8. When the user exits the program, the current doctor, patient, and permitted staff collections are saved via `save_data()` to the same binary persistence file.
 
 ## Data Persistence
 The latest implementation adds a persistence layer that serializes the in-memory hospital objects using Python's `pickle` module.

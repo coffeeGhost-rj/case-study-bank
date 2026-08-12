@@ -113,6 +113,8 @@ def load_data():
 # __main__ instead of being executed at import time.
 if __name__ == "__main__":
     doctors, patients, pStaff = load_data()
+    
+    # print(doctors)
     for s in pStaff:
         print(s.u_id)
         print(s.name)

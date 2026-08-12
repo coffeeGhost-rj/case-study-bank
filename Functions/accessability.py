@@ -70,7 +70,7 @@ def findUser(uid, datalist):
 # Therefore: Many Patients --> One Doctor
 # ============================================================
 
-def showDoctors(patients):
+def showDoctors(patientsList):
 
     print("\nAvailable Doctors")
     print("-" * 40)
@@ -80,7 +80,7 @@ def showDoctors(patients):
     doctors_list = []
 
     # Iterating through Patient objects.
-    for patient in patients:
+    for patient in patientsList:
 
         # Each Patient has an associated Doctor object.
         if patient.doctor not in doctors_list:
@@ -101,12 +101,12 @@ def showDoctors(patients):
 # DISPLAY PATIENTS
 # ============================================================
 
-def showPatients(patients):
+def showPatients(patientsList):
 
     print("\nAvailable Patients")
     print("-" * 40)
 
-    for patient in patients:
+    for patient in patientsList:
 
         print(
             patient.u_id,
@@ -424,7 +424,7 @@ def doctorAccess(doctorsList , patientsList, staffList):
     print("\n ------------------------")
     print(
         "Doctors present in the hospital: ",
-        len(doctors)
+        len(doctorsList)
     )
     print("\n ------------------------")
 
@@ -438,7 +438,7 @@ def doctorAccess(doctorsList , patientsList, staffList):
         inpatient_count = 0
         outpatient_count = 0
 
-        for patient in patients:
+        for patient in patientsList:
 
             # Checking whether this patient is assigned to the logged-in doctor.
             if patient.doctor is doctor:
