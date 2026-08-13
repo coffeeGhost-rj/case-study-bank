@@ -3,6 +3,7 @@ from Functions.dataHandling import save_data
 from Functions.AlertManager import generateAlert
 from Functions.VitalSigns import VitalSigns
 
+
 # Runtime state is initialized by Main.py via load_data() and then
 # synchronized into these module-level collections.
 doctors = []
@@ -28,7 +29,7 @@ def findUser(uid, datalist):
 # ============================================================
 # Searches for a Patient object using the Patient ID.
 
-# def findpatient(p_ID):
+# def findpatient(p_ID,patients):
 
 #     # Iterate through all Patient objects.
 #     for p in patients:
@@ -92,7 +93,9 @@ def showDoctors(patientsList):
 
         print(
             doctor.u_id,
+            "\t",
             doctor.name,
+            "\t",
             doctor.specialization
         )
 
@@ -419,6 +422,36 @@ def addPatient(patients, doctors, patient_type):
 
         print("Record error:", e)
 
+
+
+def viewLatestVitals(patientsList):
+
+    try:
+        patient_ID = input("Enter patient ID:")
+
+        patient = findUser(patient_ID.upper(),patientsList)
+        # if patient:
+        #     print(patient.pName)
+
+        print("\n===================================")
+        print("      LATEST VITAL READING           ")
+        print("\n===================================")
+
+        latest_vital = patient.getLatestVitals()
+        
+        print("\nPatient ID: ", patient.patient_id)
+        print("Patient Name: ", patient.pName)
+        print("\n" + latest_vital.showVitalDetails())
+
+    except ValueError as e:
+        print("Error",e)
+
+    except LookupError as e:
+        print("Error", e)
+
+    except Exception as e:
+        print("An unexpected error occurred.", e)
+
 def doctorAccess(doctorsList , patientsList, staffList):
 
     print("\n ------------------------")
@@ -435,8 +468,7 @@ def doctorAccess(doctorsList , patientsList, staffList):
         # Finding the corresponding Doctor object.
         doctor = findUser(doctor_id.upper(), doctorsList)
 
-        inpatient_count = 0
-        outpatient_count = 0
+        count = 0
 
         for patient in patientsList:
 
@@ -444,32 +476,16 @@ def doctorAccess(doctorsList , patientsList, staffList):
             if patient.doctor is doctor:
 
                 # Separate patients according to their patient type.
-                if patient.patient_type == "Inpatient":
+                if patient.patient_type == "Inpatient" or patient.patient_type == "Outpatient":
 
-                    inpatient_count += 1
-
-                elif patient.patient_type == "Outpatient":
-
-                    outpatient_count += 1
+                    count += 1
 
 
         print("\n")
         print("Hello Dr.", doctor.name, "!")
         print("\n")
 
-        print("Patients under your care:")
-        print(
-            "Inpatients  :",
-            inpatient_count
-        )
-        print(
-            "Outpatients :",
-            outpatient_count
-        )
-        print(
-            "Total Patients:",
-            inpatient_count + outpatient_count
-        )
+        print("Patients under your care:" , count)
 
         print("\n")
 
@@ -482,8 +498,7 @@ def doctorAccess(doctorsList , patientsList, staffList):
             print("---- Patient Records ----")
 
             print("1. Patient Access")
-            # print("2. Add Patient")
-            print("2. Update Patient Vital Signs (New Reading)")
+            print("2. Get latest Patient Vital Sign reading.")
             print("3. Exit from Doctor window.")
             print("\n")
 
@@ -495,12 +510,10 @@ def doctorAccess(doctorsList , patientsList, staffList):
                 case (1):
                     # comment: Access a Patient Object
                     patientAccess(patientsList)
+
                 case (2):
-                    # comment: Create and add a new Patient object.
-                #     addPatient()
-                # case (3):
-                    # comment: Create and associate a new VitalSigns object.
-                    updatePatientVitals(staffList, patientsList)
+                    viewLatestVitals(patientsList)
+
                 case (3):
                     # comment: Exit Doctor's window
                     print("\n","Exiting the Doctor Window.....")
@@ -606,13 +619,13 @@ def pmsAccess(pStaff, patients,doctors):
         # Finding the corresponding Doctor object.
         staff = findUser(pms_id.upper(), pStaff)
         
-        #print("\n",staff.name,"\n")
+        print("\n",staff.name,"\n")
 
 
 
         print("\n================================")
         print("Welcome", staff.name + "!")
-        print("Staff ID:", staff.u_id)
+        # print("Staff ID:", staff.u_id)
         print("Designation:", staff.designation)
         print("================================")
 
@@ -642,6 +655,7 @@ def pmsAccess(pStaff, patients,doctors):
                         updatePatientVitals(staff,patients)
 
                     case 2:
+                        print("\nSaving the Newly added Patient >>>")
                         print("\nExiting the Nurse Window.....")
                         break
 

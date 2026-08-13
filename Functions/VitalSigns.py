@@ -32,13 +32,6 @@ class VitalSigns():
             self.oxygen = spo2
 
 
-    # def showVitalDetails(self):
-        
-    #     return ("Temperature: " + str(self.temperature)+ "°C" +
-    #             "\nPulse: " + str(self.pulse) + "bpm" +
-    #             "\nOxygen saturation : " + str(self.oxygen) + "%" +
-    #             "\nRecorded Time: " + self.recorded_time.strftime("%d-%m-%Y  %H:%M:%S")
-    #             )
 
     def showVitalDetails(self):
 
@@ -50,8 +43,7 @@ class VitalSigns():
             self.recorded_time.strftime("%d-%m-%Y  %H:%M:%S")
         )
 
-        # Display staff details only when a staff member
-        # has recorded the reading.
+        # Display staff details only when a staff member has recorded the reading.
         recorded_by = getattr(self, "recorded_by", None)
         if recorded_by is not None:
 
